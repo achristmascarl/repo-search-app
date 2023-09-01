@@ -35,15 +35,6 @@ export default function SearchScreen({ navigation }: SearchScreenProps) {
     }
   }
 
-  // owner.avatar_url
-  // full_name
-  // description
-
-  // html_url
-  // languages_url
-  // watchers
-  // forks
-  // stargazers_count
   useEffect(() => {
     setProcessedRepos(
       rawRepos.map((repo, index) => {
@@ -63,16 +54,19 @@ export default function SearchScreen({ navigation }: SearchScreenProps) {
   }, [rawRepos]);
 
   useEffect(() => {
-    console.log(searchText);
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     if (searchText.length > 2) {
       debounceTimeout.current = setTimeout(() => {
+        setLoading(true);
         try {
           (async () => {
             const items = await searchRepos(searchText);
             setRawRepos(items);
+            setLoading(false);
+            setShowError(false);
           })();
         } catch (e) {
+          setShowError(true);
           console.log(e);
         }
       }, 300);
@@ -115,26 +109,34 @@ export default function SearchScreen({ navigation }: SearchScreenProps) {
         </View>
       </View>
       <View>
-        <FlatList
-          data={processedRepos}
-          renderItem={({ item }) => (
-            <RepoCard
-              query={searchText}
-              name={item.name}
-              avatarUrl={item.avatarUrl}
-              description={item.description}
-              link={item.link}
-              languagesUrl={item.languagesUrl}
-              watchers={item.watchers}
-              forks={item.forks}
-              stars={item.stars}
-              navigation={navigation}
-            />
-          )}
-          keyExtractor={(item) => `${item.index}`}
-          showsVerticalScrollIndicator={false}
-          onScroll={(e) => handleScroll(e)}
-        />
+        {loading ? (
+          <Text style={{ margin: 30, width: "100%" }}>Loading...</Text>
+        ) : showError ? (
+          <Text style={{ margin: 30, width: "100%" }}>
+            Error retrieving repos, please try again.
+          </Text>
+        ) : (
+          <FlatList
+            data={processedRepos}
+            renderItem={({ item }) => (
+              <RepoCard
+                query={searchText}
+                name={item.name}
+                avatarUrl={item.avatarUrl}
+                description={item.description}
+                link={item.link}
+                languagesUrl={item.languagesUrl}
+                watchers={item.watchers}
+                forks={item.forks}
+                stars={item.stars}
+                navigation={navigation}
+              />
+            )}
+            keyExtractor={(item) => `${item.index}`}
+            showsVerticalScrollIndicator={false}
+            onScroll={(e) => handleScroll(e)}
+          />
+        )}
       </View>
     </View>
   );

@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 14,
-    fontFamily: "SF-Pro",
-    fontWeight: "700",
+    fontFamily: "SF-Pro Bold",
+    fontWeight: "bold",
   },
   searchWrapper: {
     padding: 12,

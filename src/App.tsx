@@ -45,6 +45,7 @@ const TemplatedDetailsScreen = () => {
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     "SF-Pro": require("./../assets/fonts/SF-Pro.ttf"),
+    "SF-Pro Bold": require("./../assets/fonts/SF-Pro-Display-Bold.otf"),
   });
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded || fontError) {
@@ -67,9 +68,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   screenTemplate: {
-    // backgroundColor:
-    //   "linear-gradient(180deg, rgba(96, 31, 235, 0.10) " +
-    //   "0%, rgba(241, 241, 241, 0.00) 100%), #F1F1F1",
     height: "100%",
   },
 });

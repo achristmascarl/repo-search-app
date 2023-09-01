@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Button, View, StyleSheet, Pressable } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Image } from "expo-image";
 import Octicons from "@expo/vector-icons/Octicons";
 import { getLanguages } from "../services/github";

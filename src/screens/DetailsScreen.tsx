@@ -19,6 +19,16 @@ export default function DetailsScreen({ route, navigation, query }) {
     stars,
   } = route.params;
 
+  // TODO: highlight query in name
+  // function highlightQuery(text: string) {
+
+  // }
+
+  // TODO: humanize numbers
+  // function humanizeNumbers(text: string) {
+
+  // }
+
   useEffect(() => {
     try {
       (async () => {

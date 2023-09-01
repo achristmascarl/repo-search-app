@@ -26,6 +26,11 @@ export default function RepoCard({
   stars,
   navigation,
 }: RepoCardProps) {
+  // TODO: highlight query in name
+  // function highlightQuery(text: string) {
+
+  // }
+
   return (
     <View style={styles.container}>
       <Pressable

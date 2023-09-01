@@ -26,3 +26,18 @@ export async function searchRepos(query: string) {
       throw new Error(err);
     });
 }
+
+export async function getLanguages(languagesUrl: string) {
+  return await fetch(languagesUrl, {
+    method: "GET",
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((json) => {
+      return Object.keys(json);
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+}

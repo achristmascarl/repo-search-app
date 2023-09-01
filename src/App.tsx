@@ -27,17 +27,17 @@ const ScreenTemplate = ({ children }: { children: React.ReactNode }) => {
     </View>
   );
 };
-const TemplatedSearchScreen = () => {
+const TemplatedSearchScreen = ({ route, navigation }) => {
   return (
     <ScreenTemplate>
-      <SearchScreen />
+      <SearchScreen route={route} navigation={navigation} />
     </ScreenTemplate>
   );
 };
-const TemplatedDetailsScreen = () => {
+const TemplatedDetailsScreen = ({ route, navigation }) => {
   return (
     <ScreenTemplate>
-      <DetailsScreen />
+      <DetailsScreen route={route} navigation={navigation} />
     </ScreenTemplate>
   );
 };

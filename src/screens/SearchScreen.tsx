@@ -1,17 +1,39 @@
 import { useEffect, useState, useRef } from "react";
-import { Text, TextInput, View, StyleSheet, FlatList } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  FlatList,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
 import Octicons from "@expo/vector-icons/Octicons";
 import { searchRepos } from "../services/github";
 import { RawRepo, ProcessedRepo } from "../models/Repo";
 import RepoCard from "../components/RepoCard";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export default function SearchScreen() {
+interface SearchScreenProps {
+  navigation: NativeStackNavigationProp<any, any>;
+}
+
+export default function SearchScreen({ navigation }: SearchScreenProps) {
   const [searchText, setSearchText] = useState("");
   const [rawRepos, setRawRepos] = useState<RawRepo[]>([]);
   const [processedRepos, setProcessedRepos] = useState<ProcessedRepo[]>([]);
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [scrollBorder, setScrollBorder] = useState(false);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    if (e.nativeEvent.contentOffset.y > 0) {
+      setScrollBorder(true);
+    } else {
+      setScrollBorder(false);
+    }
+  }
 
   // owner.avatar_url
   // full_name
@@ -65,7 +87,7 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, scrollBorder ? styles.scrollBorder : []]}>
         <View style={styles.headerTitle}>
           <Octicons name="mark-github" size={40} color="black" />
           <Text style={styles.titleText}>Github Repo Search</Text>
@@ -97,6 +119,7 @@ export default function SearchScreen() {
           data={processedRepos}
           renderItem={({ item }) => (
             <RepoCard
+              query={searchText}
               name={item.name}
               avatarUrl={item.avatarUrl}
               description={item.description}
@@ -105,10 +128,12 @@ export default function SearchScreen() {
               watchers={item.watchers}
               forks={item.forks}
               stars={item.stars}
+              navigation={navigation}
             />
           )}
           keyExtractor={(item) => `${item.index}`}
           showsVerticalScrollIndicator={false}
+          onScroll={(e) => handleScroll(e)}
         />
       </View>
     </View>
@@ -117,12 +142,18 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    paddingVertical: 30,
   },
   header: {
     display: "flex",
     flexDirection: "column",
     gap: 24,
+    paddingBottom: 8,
+    paddingHorizontal: 30,
+  },
+  scrollBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#DDD",
   },
   headerTitle: {
     display: "flex",
@@ -146,6 +177,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 48,
+    flex: 1,
   },
   clearIcon: {
     marginLeft: "auto",

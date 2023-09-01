@@ -1,6 +1,8 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Image } from "expo-image";
 
 interface RepoCardProps {
+  query: string;
   avatarUrl: string;
   name: string;
   description: string;
@@ -9,9 +11,11 @@ interface RepoCardProps {
   watchers: number;
   forks: number;
   stars: number;
+  navigation: any;
 }
 
 export default function RepoCard({
+  query,
   avatarUrl,
   name,
   description,
@@ -20,15 +24,33 @@ export default function RepoCard({
   watchers,
   forks,
   stars,
+  navigation,
 }: RepoCardProps) {
   return (
     <View style={styles.container}>
-      <View style={styles.body}>
-        <View style={styles.titleRow}>
-          <Text>{stars}</Text>
+      <Pressable
+        onPress={() =>
+          navigation.navigate("Details", {
+            query,
+            avatarUrl,
+            name,
+            description,
+            link,
+            languagesUrl,
+            watchers,
+            forks,
+            stars,
+          })
+        }
+      >
+        <View style={styles.body}>
+          <View style={styles.titleRow}>
+            <Image style={styles.avatarImage} source={{ uri: avatarUrl }} />
+            <Text>{name}</Text>
+          </View>
+          <Text>{description}</Text>
         </View>
-        <Text>{name}</Text>
-      </View>
+      </Pressable>
     </View>
   );
 }
@@ -39,6 +61,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     padding: 16,
     borderRadius: 10,
+    marginHorizontal: 30,
   },
   body: {
     display: "flex",
@@ -49,5 +72,11 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 10,
+    alignItems: "center",
+  },
+  avatarImage: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
   },
 });

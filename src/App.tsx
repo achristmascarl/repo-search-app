@@ -1,10 +1,15 @@
+import { useCallback } from "react";
 import { registerRootComponent } from "expo";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import SearchScreen from "./screens/SearchScreen";
 import DetailsScreen from "./screens/DetailsScreen";
+
+SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +22,7 @@ const ScreenTemplate = ({ children }: { children: React.ReactNode }) => {
         end={{ x: 0.5, y: 1 }}
         style={{ height: "100%" }}
       >
-        {children}
+        <SafeAreaView>{children}</SafeAreaView>
       </LinearGradient>
     </View>
   );
@@ -38,8 +43,20 @@ const TemplatedDetailsScreen = () => {
 };
 
 export default function App() {
+  const [fontsLoaded, fontError] = useFonts({
+    "SF-Pro": require("./../assets/fonts/SF-Pro.ttf"),
+  });
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={onLayoutRootView}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Search" component={TemplatedSearchScreen} />
         <Stack.Screen name="Details" component={TemplatedDetailsScreen} />

@@ -14,3 +14,4 @@
 - There are some Typescript errors, namely around typing for `react-navigation`, that I left as is since that wasn't the focus of the take home
 - There are some commented out skeleton functions for minor improvements I would have liked to get around to (humanizing numbers, highlighting search terms, etc.)
 - The way the github token is used is not good from a security perspective and it shouldn't be done that way in prod, but since having a server wasn't the focus of the take home, I left it as is
+- It's mostly responsive, but on smaller screens, for repos with a lot of languages, they can overlap and go under the button. Would want to make that part scrollable for smaller screens
